@@ -5,7 +5,7 @@ Widget renderTabBar () {
   return Container(
     margin: EdgeInsets.only(bottom: 20),
     child: TabBar(
-      indicatorColor: Color.fromARGB(255, 244, 226, 109),
+      indicatorColor: Color.fromARGB(255, 247, 219, 34),
       indicatorPadding: EdgeInsets.only(left: 22, right: 22),
       indicatorWeight: 3,
       labelPadding: EdgeInsets.all(0),
@@ -16,7 +16,7 @@ Widget renderTabBar () {
           Container(
             padding: EdgeInsets.only(left: 16, right: 16),
             height: 36,
-            color: Colors.white,
+            color: Color.fromARGB(255, 240, 240, 240),
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Text(

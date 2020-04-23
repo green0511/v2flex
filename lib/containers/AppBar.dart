@@ -4,7 +4,7 @@ PreferredSize renderAppBar () {
   return PreferredSize(
     preferredSize: Size.fromHeight(72),
     child: AppBar(
-      backgroundColor: Color.fromARGB(255, 240, 240, 240),
+      backgroundColor: Color.fromARGB(255, 230, 230, 230),
       elevation: 0,
       centerTitle: false,
       title: Text(
