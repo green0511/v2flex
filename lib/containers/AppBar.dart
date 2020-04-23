@@ -27,10 +27,6 @@ PreferredSize renderAppBar () {
           )
         ),
       ],
-      bottom: TabBar(
-        tabs: <Widget>[
-        ],
-      ),
     ),
   );
 }

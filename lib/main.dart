@@ -6,6 +6,7 @@ import './model.dart';
 import './api.dart';
 
 import './containers/AppBar.dart';
+import './containers/TabBar.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,15 +23,25 @@ class MyApp extends StatelessWidget {
         length: 10,
         child: Scaffold(
           appBar: renderAppBar(),
-          body: FutureBuilder<List<ItemSummary>>(
-            future: fetchItems(http.Client()),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) print(snapshot.error);
+          body: Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                renderTabBar(),
+                Expanded(
+                  child: FutureBuilder<List<ItemSummary>>(
+                    future: fetchItems(http.Client()),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print(snapshot.error);
 
-              return snapshot.hasData
-                ? ItemsList(items: snapshot.data)
-                : Center(child: CircularProgressIndicator());
-            },
+                      return snapshot.hasData
+                        ? ItemsList(items: snapshot.data)
+                        : Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
