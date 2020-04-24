@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import 'package:v2flex/model.dart';
+import 'package:v2flex/utils/date_format.dart';
 
 class ItemsList extends StatelessWidget {
   final List<ItemSummary> items;
@@ -16,7 +17,8 @@ class ItemsList extends StatelessWidget {
       itemCount: items.length,
       itemBuilder: (BuildContext context, int index) {
         ItemSummary item = items[index];
-
+        // DateTime lastTouchDateTime = DateTime.fromMillisecondsSinceEpoch(item.lastTouched * 1000);
+        String relativeTimeString = formatToRelative(item.lastTouched);
         return Container(
           margin: EdgeInsets.only(
             top: 10,
@@ -65,18 +67,6 @@ class ItemsList extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(right: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(36),
-                              child: Image.network(
-                                item.member.avatarLarge,
-                                width: 36,
-                                height: 36,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -92,16 +82,55 @@ class ItemsList extends StatelessWidget {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: 2),
-                                  child: Text(
-                                    item.member.username,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.black45,
-                                      fontSize: 13,
-                                      height: 1,
-                                    ),
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(right: 6),
+                                        height: 16,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 5
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black87,
+                                          borderRadius: BorderRadius.all(Radius.circular(3)),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            item.node.title,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 9,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        item.member.username,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 14,
+                                          // height: 1,
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          relativeTimeString,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -110,7 +139,7 @@ class ItemsList extends StatelessWidget {
                         ],
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 15),
+                        margin: EdgeInsets.only(top: 10),
                         child: Text(
                           item.content,
                           textAlign: TextAlign.justify,
@@ -124,15 +153,28 @@ class ItemsList extends StatelessWidget {
                           ),
                         ),
                       ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        // widthFactor: 3,
+                        child: FractionallySizedBox(
+                          widthFactor: 0.3,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 10),
+                            width: 100,
+                            height: 3,
+                            color: Colors.black12,
+                          ),
+                        ),
+                      ),
                       Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 5),
+                        margin: EdgeInsets.only(top: 10, bottom: 5),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             // IconTextButton('20 ups', Icons.arrow_upward),
-                            IconTextButton('20 replies', Icons.chat_bubble),
-                            IconTextButton('200 views', Icons.remove_red_eye),
+                            IconTextButton('${item.replies} 回复', Icons.chat_bubble),
+                            // IconTextButton('200 views', Icons.remove_red_eye),
                           ],
                         ),
                       ),
@@ -156,27 +198,30 @@ class IconTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(right: 5),
-          child: Icon(
-            this.iconData,
-            size: 16,
-            color: Colors.black38,
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          // Container(
+          //   margin: EdgeInsets.only(right: 5),
+          //   child: Icon(
+          //     this.iconData,
+          //     size: 16,
+          //     color: Colors.black38,
+          //   ),
+          // ),
+          Text(
+            this.text,
+            style: TextStyle(
+              fontSize: 14,
+              height: 1,
+              color: Colors.black54,
+            ),
           ),
-        ),
-        Text(
-          this.text,
-          style: TextStyle(
-            fontSize: 14,
-            height: 1,
-            color: Colors.black54,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -34,6 +34,40 @@ class ItemMember {
     website = json['website'];
 }
 
+class ItemNode {
+  // aliases: []
+  final int id;
+  final int stars;
+  final int topics;
+  final bool root;
+  final String avatarLarge;
+  final String avatarMini;
+  final String avatarNormal;
+  final String footer;
+  final String header;
+  final String name;
+  final String parentNodeName;
+  final String title;
+  final String titleAlternative;
+  final String url;
+
+  ItemNode.fromJSON(Map<String, dynamic> json):
+    id = json['id'],
+    stars = json['stars'],
+    topics = json['topics'],
+    root = json['root'],
+    avatarLarge = json['avatar_large'],
+    avatarMini = json['avatar_mini'],
+    avatarNormal = json['avatar_normal'],
+    footer = json['footer'],
+    header = json['header'],
+    name = json['name'],
+    parentNodeName = json['parent_node_name'],
+    title = json['title'],
+    titleAlternative = json['title_alternative'],
+    url = json['url'];
+}
+
 class ItemSummary {
   final String title;
   final int id;
@@ -44,6 +78,7 @@ class ItemSummary {
   final int lastTouched;
   final int replies;
   final String url;
+  final ItemNode node;
   final ItemMember member;
 
   ItemSummary.fromJSON(Map<String, dynamic> json):
@@ -56,5 +91,6 @@ class ItemSummary {
     lastTouched = json['last_touched'],
     replies = json['replies'],
     url = json['url'],
+    node = ItemNode.fromJSON(json['node']),
     member = ItemMember.fromJSON(json['member']);
 }
