@@ -8,7 +8,6 @@ import './model.dart';
 
 Future<List<ItemSummary>> fetchItems(http.Client client) async {
   final response = await client.get('http://www.mocky.io/v2/5ea311804f00006829d9f75e');
-  print(response.body.length);
   return compute(parseItems, response.body);
 }
 
