@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v2flex/pages/user.dart';
 
 PreferredSize renderAppBar () {
   return PreferredSize(
@@ -15,18 +16,33 @@ PreferredSize renderAppBar () {
         ),
       ),
       actions: <Widget>[
-        Center(
-          child: Container(
-            margin: EdgeInsets.only(right: 15),
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: Colors.black54,
-              borderRadius: BorderRadius.circular(36),
-            ),
-          )
-        ),
+        Avatar(),
       ],
     ),
   );
+}
+
+class Avatar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserRoute()),
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.only(right: 15),
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: Colors.black54,
+            borderRadius: BorderRadius.circular(36),
+          ),
+        ),
+      )
+    );
+  }
 }
