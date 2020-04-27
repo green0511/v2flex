@@ -6,11 +6,13 @@ class Topic {
   SimpleMember author;
   String title;
   int vote;
-  Node node;
+  V2Node node;
 
   String lastTouchString;
   SimpleMember lastTouchMember;
   int replyCount;
+
+  String link;
 
   Topic({
     this.id,
@@ -21,5 +23,6 @@ class Topic {
     this.lastTouchString,
     this.lastTouchMember,
     this.replyCount,
+    this.link,
   });
 }
