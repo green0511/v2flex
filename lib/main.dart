@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:v2flex/models/Topic.dart';
 
-import './model.dart';
 import './api.dart';
 
 import './containers/AppBar.dart';
@@ -14,6 +13,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    fetchTab();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
               children: <Widget>[
                 renderTabBar(),
                 Expanded(
-                  child: FutureBuilder<List<ItemSummary>>(
-                    future: fetchItems(http.Client()),
+                  child: FutureBuilder<List<Topic>>(
+                    future: fetchTab(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) print(snapshot.error);
 

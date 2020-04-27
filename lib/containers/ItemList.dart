@@ -2,11 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-import 'package:v2flex/model.dart';
-import 'package:v2flex/utils/date_format.dart';
+import 'package:v2flex/models/Models.dart';
 
 class ItemsList extends StatelessWidget {
-  final List<ItemSummary> items;
+  final List<Topic> items;
 
   ItemsList({Key key, this.items}) : super(key: key);
 
@@ -16,9 +15,8 @@ class ItemsList extends StatelessWidget {
       padding: EdgeInsets.all(10),
       itemCount: items.length,
       itemBuilder: (BuildContext context, int index) {
-        ItemSummary item = items[index];
-        // DateTime lastTouchDateTime = DateTime.fromMillisecondsSinceEpoch(item.lastTouched * 1000);
-        String relativeTimeString = formatToRelative(item.lastTouched);
+        Topic item = items[index];
+
         return Container(
           margin: EdgeInsets.only(
             top: 10,
@@ -73,11 +71,11 @@ class ItemsList extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   item.title,
-                                  maxLines: 1,
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 18,
-                                    height: 1.2,
+                                    height: 1.3,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -98,7 +96,7 @@ class ItemsList extends StatelessWidget {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            item.node.title,
+                                            item.node.name,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -109,7 +107,7 @@ class ItemsList extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        item.member.username,
+                                        item.author.name,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -121,7 +119,7 @@ class ItemsList extends StatelessWidget {
                                       Container(
                                         margin: EdgeInsets.only(left: 5),
                                         child: Text(
-                                          relativeTimeString,
+                                          item.lastTouchString,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -137,21 +135,6 @@ class ItemsList extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Text(
-                          item.content,
-                          textAlign: TextAlign.justify,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15,
-                            letterSpacing: 0.8,
-                            color: Colors.black87,
-                            height: 1.4,
-                          ),
-                        ),
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -173,7 +156,7 @@ class ItemsList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             // IconTextButton('20 ups', Icons.arrow_upward),
-                            IconTextButton('${item.replies} 回复', Icons.chat_bubble),
+                            IconTextButton('${item.replyCount} 回复', Icons.chat_bubble),
                             // IconTextButton('200 views', Icons.remove_red_eye),
                           ],
                         ),
