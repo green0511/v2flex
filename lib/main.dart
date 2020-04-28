@@ -7,13 +7,18 @@ import './containers/AppBar.dart';
 import './containers/TabBar.dart';
 import './containers/ItemList.dart';
 
-void main() => runApp(MyApp());
+import 'package:v2flex/utils/http_client.dart';
+
+void main() {
+  initDio();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    fetchTab();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
