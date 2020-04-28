@@ -1,27 +1,10 @@
-import 'dart:convert';
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 
 import 'package:v2flex/models/Models.dart';
 import 'package:v2flex/utils/http_client.dart';
-
-import './model.dart';
-
-Future<List<ItemSummary>> fetchItems(http.Client client) async {
-  final response = await client.get('http://www.mocky.io/v2/5ea311804f00006829d9f75e');
-  return compute(parseItems, response.body);
-}
-
-List<ItemSummary> parseItems(String responseBody) {
-  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
-  return parsed.map<ItemSummary>((json) => ItemSummary.fromJSON(json)).toList();
-}
 
 class V2Tab {
   final String name;
@@ -38,13 +21,13 @@ List<V2Tab> fetchTabs() {
     V2Tab(name: '技术', id: 'tech'),
     V2Tab(name: '创意', id: 'creative'),
     V2Tab(name: '好玩', id: 'play'),
-    // V2Tab(name: 'Apple', id: 'apple'),
-    // V2Tab(name: '酷工作', id: 'jobs'),
-    // V2Tab(name: '交易', id: 'deals'),
-    // V2Tab(name: '城市', id: 'city'),
-    // V2Tab(name: '问与答', id: 'qna'),
-    // V2Tab(name: '最热', id: 'hot'),
-    // V2Tab(name: '全部', id: 'all'),
+    V2Tab(name: 'Apple', id: 'apple'),
+    V2Tab(name: '酷工作', id: 'jobs'),
+    V2Tab(name: '交易', id: 'deals'),
+    V2Tab(name: '城市', id: 'city'),
+    V2Tab(name: '问与答', id: 'qna'),
+    V2Tab(name: '最热', id: 'hot'),
+    V2Tab(name: '全部', id: 'all'),
   ];
 }
 
