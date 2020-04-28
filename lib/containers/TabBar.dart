@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:v2flex/api.dart';
 
-Widget renderTabBar () {
+Widget renderTabBar (List<V2Tab> tabs) {
   return Container(
     margin: EdgeInsets.only(bottom: 20),
     child: TabBar(
@@ -11,23 +11,22 @@ Widget renderTabBar () {
       labelPadding: EdgeInsets.all(0),
       labelColor: Colors.black87,
       isScrollable: true,
-      tabs: fetchTabs()
-        .map((tabName) => (
-          Container(
-            padding: EdgeInsets.only(left: 16, right: 16),
-            height: 36,
-            color: Color.fromARGB(255, 240, 240, 240),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                tabName,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+      tabs: tabs.map((tab) => (
+        Container(
+          padding: EdgeInsets.only(left: 16, right: 16),
+          height: 36,
+          color: Color.fromARGB(255, 240, 240, 240),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              tab.name,
+              style: TextStyle(
+                fontSize: 16,
               ),
             ),
-          )
-        )).toList(),
+          ),
+        )
+      )).toList(),
     ),
   );
 }

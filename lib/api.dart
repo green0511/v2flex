@@ -8,6 +8,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 
 import 'package:v2flex/models/Models.dart';
+import 'package:v2flex/utils/http_client.dart';
 
 import './model.dart';
 
@@ -22,25 +23,37 @@ List<ItemSummary> parseItems(String responseBody) {
   return parsed.map<ItemSummary>((json) => ItemSummary.fromJSON(json)).toList();
 }
 
-List<String> fetchTabs() {
+class V2Tab {
+  final String name;
+  final String id;
+
+  V2Tab({
+    this.name,
+    this.id,
+  });
+}
+
+List<V2Tab> fetchTabs() {
   return [
-    '技术',
-    '创意',
-    '好玩',
-    'Apple',
-    '酷工作',
-    '交易',
-    '城市',
-    '问与答',
-    '最热',
-    '全部'
+    V2Tab(name: '技术', id: 'tech'),
+    V2Tab(name: '创意', id: 'creative'),
+    V2Tab(name: '好玩', id: 'play'),
+    // V2Tab(name: 'Apple', id: 'apple'),
+    // V2Tab(name: '酷工作', id: 'jobs'),
+    // V2Tab(name: '交易', id: 'deals'),
+    // V2Tab(name: '城市', id: 'city'),
+    // V2Tab(name: '问与答', id: 'qna'),
+    // V2Tab(name: '最热', id: 'hot'),
+    // V2Tab(name: '全部', id: 'all'),
   ];
 }
 
-Future<List<Topic>> fetchTab() async {
-  final response = await http.Client().get('http://127.0.0.1:7001/');
-  Document document = parse(response.body);
-  List<Element> posts = document.body.querySelectorAll('#Main .box .cell.item');
+Future<List<Topic>> fetchTab(V2Tab tab) async {
+  final response = await dio.get('/', queryParameters: {
+    'tab': tab.id,
+  });
+  Document document = parse(response.data);
+  List<Element> posts = document.body.querySelectorAll('.box .cell.item');
   List<Topic> items = posts.map((ele) {
     // <span class="item_title">
     //   <a href="/t/666257#reply77" class="topic-link">
@@ -85,18 +98,21 @@ Future<List<Topic>> fetchTab() async {
     // 解析最后回复
     //  &nbsp;•&nbsp; 1 小时 49 分钟前 &nbsp;•&nbsp; 最后回复来自 
     String lastTouchString = '';
-    Element topicInfoEl = ele.querySelector('.topic_info');
+    Element topicInfoEl = ele;
     if (topicInfoEl != null) {
-      RegExpMatch lastTouchTimeMatch = RegExp(r"&nbsp;•&nbsp; ([^&]+) &nbsp;•&nbsp", multiLine: true).firstMatch(topicInfoEl.innerHtml);
+      RegExpMatch lastTouchTimeMatch = RegExp(r"([^&|^>]+) &nbsp;•&nbsp; 最后回复来自 ", multiLine: true).firstMatch(topicInfoEl.innerHtml);
       if (lastTouchTimeMatch != null) {
         lastTouchString = lastTouchTimeMatch.group(1);
       }
     }
 
     String lastTouchMemberName = '';
-    Element lastTouchMemberEl = topicInfoEl.querySelectorAll('strong')[1];
-    if (lastTouchMemberEl != null) {
-      lastTouchMemberName = lastTouchMemberEl.querySelector('a').text;
+    List<Element> allStrongs = topicInfoEl.querySelectorAll('strong');
+    if (allStrongs.length > 1) {
+      Element lastTouchMemberEl = allStrongs[1];
+      if (lastTouchMemberEl != null) {
+        lastTouchMemberName = lastTouchMemberEl.querySelector('a').text;
+      }
     }
 
     // 解析回复数
