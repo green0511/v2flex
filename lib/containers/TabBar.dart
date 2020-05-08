@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:v2flex/api.dart';
 
-Widget renderTabBar (List<V2Tab> tabs) {
+Widget renderTabBar (List<V2Tab> tabs, TabController controller) {
   return Container(
     margin: EdgeInsets.only(bottom: 20),
     child: TabBar(
+      controller: controller,
       indicatorColor: Color.fromARGB(255, 247, 219, 34),
       indicatorPadding: EdgeInsets.only(left: 22, right: 22),
       indicatorWeight: 3,

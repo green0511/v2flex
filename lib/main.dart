@@ -20,48 +20,198 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    List<V2Tab> tabs = fetchTabs();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  DefaultTabController(
-        length: tabs.length,
-        child: Scaffold(
-          appBar: renderAppBar(),
-          body: Container(
-            color: Color.fromARGB(255, 240, 240, 240),
-            child: Column(
-              children: <Widget>[
-                renderTabBar(tabs),
-                Expanded(
-                  child: renderTabView(tabs),
-                ),
-              ],
-            ),
-          ),
-        ),
+      home:  HomeApp(),
+    );
+  }
+}
+
+Widget renderTabView(
+  List<V2Tab> tabs,
+  Map<String, TabData> tabDataStore,
+  TabController controller,
+  RefreshCallback onRefresh,
+  V2Tab currentTab,
+) {
+  return TabBarView(
+    controller: controller,
+    children: tabs.map((tab) {
+      return SingleTabView(tab, tabDataStore, onRefresh, tab.id == currentTab.id);
+    }).toList(),
+  );
+}
+
+typedef RefreshCallback = Future<dynamic> Function(V2Tab tab, bool isForce);
+
+class SingleTabView extends StatefulWidget {
+  final V2Tab tab;
+  final Map<String, TabData> tabDataStore;
+  final RefreshCallback onRefresh;
+  final bool isCurrent;
+
+  SingleTabView(
+    this.tab,
+    this.tabDataStore,
+    this.onRefresh,
+    this.isCurrent,
+  );
+
+  @override
+  _SingleTabViewState createState() => _SingleTabViewState();
+}
+
+class _SingleTabViewState extends State<SingleTabView> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Builder(
+        builder: (context) {
+          TabData tabData = widget.tabDataStore[widget.tab.id];
+          int topicListLength = tabData?.topicList?.length ?? 0;
+          if (topicListLength == 0) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (tabData.hasExpire() && !tabData.isRefreshing && widget.isCurrent) {
+            _refreshIndicatorKey.currentState?.show();
+          }
+
+          return RefreshIndicator(
+            color: Colors.black87,
+            key: _refreshIndicatorKey,
+            child: ItemsList(items: tabData.topicList),
+            onRefresh: () async {
+              await widget.onRefresh(widget.tab, true);
+            },
+          );
+        },
       ),
     );
   }
 }
 
-Widget renderTabView(List<V2Tab> tabs) {
-  return TabBarView(
-    children: tabs.map((tab) {
-      return Container(
-        child: FutureBuilder<List<Topic>>(
-          future: fetchTab(tab),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
+class HomeApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return HomeAppState();
+  }
+}
 
-            return snapshot.hasData
-              ? ItemsList(items: snapshot.data)
-              : Center(child: CircularProgressIndicator());
-          },
+class TabData {
+  // expired in 60 seconds
+  static int expireDuration = 1000 * 5;
+
+  bool isRefreshing = false;
+
+  List<Topic> topicList = [];
+
+  DateTime lastUpdateTime;
+
+  TabData()
+    : lastUpdateTime = DateTime.now();
+
+  setList(List<Topic> newList) {
+    topicList = newList;
+    lastUpdateTime = DateTime.now();
+  }
+
+  hasExpire() {
+    return lastUpdateTime.millisecondsSinceEpoch + expireDuration <=  DateTime.now().millisecondsSinceEpoch;
+  }
+}
+
+class HomeAppState extends State<HomeApp> with SingleTickerProviderStateMixin {
+
+  List<V2Tab> tabs = [];
+  Map<String, TabData> tabDataStore = {};
+
+  TabController controller;
+  int _currentTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initTabs();
+  }
+
+  _initTabs() {
+    tabs = fetchTabs();
+
+    controller = TabController(
+      length: tabs.length,
+      vsync: this,
+    );
+
+    controller.addListener(() => _onTabChanged());
+
+    fetchTabData(tabs[_currentTabIndex]);
+  }
+
+  Future<void> fetchTabData(V2Tab tab, [bool isForce = false]) async {
+    tabDataStore[tab.id] = tabDataStore[tab.id] ?? TabData();
+    var currentTabData = tabDataStore[tab.id];
+
+    if (currentTabData.topicList.length > 0 && !currentTabData.hasExpire() && !isForce) {
+      // 已有数据并且没有过期，则不请求新数据
+      return;
+    }
+
+    if (currentTabData.isRefreshing) return;
+
+    setState(() {
+      currentTabData.isRefreshing = true;
+    });
+
+    // print('fetching ${tab.name}');
+    List<Topic> data = await fetchTab(tab);
+    setState(() {
+      currentTabData.setList(data);
+      currentTabData.isRefreshing = false;
+    });
+  }
+
+  _onTabChanged() {
+    if (controller.index.toDouble() == controller.animation.value) { 
+      //赋值 并更新数据
+      this.setState(() {
+        _currentTabIndex = controller.index;
+
+        V2Tab tab = tabs[_currentTabIndex];
+        if (tabDataStore[tab.id] == null) {
+          fetchTabData(tabs[_currentTabIndex]);
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: renderAppBar(),
+      body: Container(
+        color: Color.fromARGB(255, 240, 240, 240),
+        child: Column(
+          children: <Widget>[
+            renderTabBar(tabs, controller),
+            Expanded(
+              child: renderTabView(
+                tabs,
+                tabDataStore,
+                controller,
+                fetchTabData,
+                tabs[_currentTabIndex],
+              ),
+            ),
+          ],
         ),
-      );
-    }).toList(),
-  );
+      ),
+    );
+  }
 }
