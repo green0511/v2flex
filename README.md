@@ -19,11 +19,12 @@ samples, guidance on mobile development, and a full API reference.
 
 ## 技术
 
-- [ ] 本地 Mock API 服务
+- [x] 本地 Mock API 服务
 
 ## 首页
 
-- [ ] 分 Tab 加载列表
+- [x] 分 Tab 加载列表
+- [ ] 增加 "首页"、"关注"、"发布按钮"、"消息"、"我的" 底部 tab
 - [ ] Tab 下二级节点展示、跳转
 - [ ] 全部节点页
 - [ ] 首页 Tab 自定义(节点收藏)
