@@ -30,6 +30,13 @@ class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin 
     _initTabs();
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   _initTabs() {
     tabs = fetchTabs();
 
