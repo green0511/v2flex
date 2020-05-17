@@ -9,6 +9,7 @@ import './containers/ItemList.dart';
 
 import 'package:v2flex/utils/http_client.dart';
 import 'package:v2flex/api.dart';
+import 'package:v2flex/models/HomeFeeds.dart';
 
 void main() {
   initDio();
@@ -100,29 +101,6 @@ class HomeApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return HomeAppState();
-  }
-}
-
-class TabData {
-  // expired in 60 seconds
-  static int expireDuration = 1000 * 5;
-
-  bool isRefreshing = false;
-
-  List<Topic> topicList = [];
-
-  DateTime lastUpdateTime;
-
-  TabData()
-    : lastUpdateTime = DateTime.now();
-
-  setList(List<Topic> newList) {
-    topicList = newList;
-    lastUpdateTime = DateTime.now();
-  }
-
-  hasExpire() {
-    return lastUpdateTime.millisecondsSinceEpoch + expireDuration <=  DateTime.now().millisecondsSinceEpoch;
   }
 }
 
