@@ -4,7 +4,6 @@ import 'package:v2flex/models/Topic.dart';
 import 'package:v2flex/models/Models.dart';
 import 'package:v2flex/api.dart';
 
-import 'package:v2flex/containers/AppBar.dart';
 import 'package:v2flex/containers/TabBar.dart';
 import 'package:v2flex/containers/ItemList.dart';
 
@@ -84,24 +83,21 @@ class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: renderAppBar(),
-      body: Container(
-        color: Color.fromARGB(255, 240, 240, 240),
-        child: Column(
-          children: <Widget>[
-            renderTabBar(tabs, controller),
-            Expanded(
-              child: renderTabView(
-                tabs,
-                tabDataStore,
-                controller,
-                fetchTabData,
-                tabs[_currentTabIndex],
-              ),
+    return Container(
+      color: Color.fromARGB(255, 240, 240, 240),
+      child: Column(
+        children: <Widget>[
+          renderTabBar(tabs, controller),
+          Expanded(
+            child: renderTabView(
+              tabs,
+              tabDataStore,
+              controller,
+              fetchTabData,
+              tabs[_currentTabIndex],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
