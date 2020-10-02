@@ -34,12 +34,18 @@ class Main extends StatefulWidget {
 
 class MainState extends State<Main> {
   int _currentIndex = 0;
+
   List<Widget> pages = [
     null,
     null,
+    null,
+    null,
   ];
+
   List getWidgetFns = [
     () => HomeFeed(),
+    () => SecondContainer(),
+    () => SecondContainer(),
     () => SecondContainer(),
   ];
 
@@ -74,14 +80,25 @@ class MainState extends State<Main> {
       appBar: renderAppBar(),
       body: bodyWidget,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        selectedItemColor: Colors.black87,
+        unselectedItemColor: Colors.black45,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: '首页',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.favorite),
+            label: '关注',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: '消息',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: '我的',
           ),
         ],
         currentIndex: _currentIndex,
