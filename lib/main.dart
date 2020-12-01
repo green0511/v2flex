@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -33,52 +32,45 @@ class Main extends StatefulWidget {
 }
 
 class MainState extends State<Main> {
-  int _currentIndex = 0;
+  PageController pageController = PageController();
 
-  List<Widget> pages = [
-    null,
-    null,
-    null,
-    null,
-  ];
+  int _currentIndex = 0;
 
   List getWidgetFns = [
     () => HomeFeed(),
-    () => SecondContainer(),
-    () => SecondContainer(),
-    () => SecondContainer(),
+    () => Placeholder(),
+    () => Placeholder(),
+    () => Placeholder(),
   ];
 
-  Widget get bodyWidget {
-    return pages[_currentIndex] ?? Container();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _setPage(_currentIndex);
-  }
-
   onTapNavigetionItem(int index) {
-    _setPage(index);
-
     setState(() {
       _currentIndex = index;
     });
-  }
 
-  _setPage(int index) {
-    if (pages[index] == null) {
-      var fn = getWidgetFns[index];
-      pages[index] = fn();
-    }
+    pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeIn,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: renderAppBar(),
-      body: bodyWidget,
+      body: PageView.builder(
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        controller: pageController,
+        itemCount: getWidgetFns.length,
+        itemBuilder: (context, index) {
+          return getWidgetFns[index]();
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(255, 240, 240, 240),
         selectedItemColor: Colors.black87,
@@ -105,12 +97,5 @@ class MainState extends State<Main> {
         onTap: onTapNavigetionItem,
       ),
     );
-  }
-}
-
-class SecondContainer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('test'),);
   }
 }

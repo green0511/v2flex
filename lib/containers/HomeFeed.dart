@@ -16,7 +16,9 @@ class HomeFeed extends StatefulWidget {
   }
 }
 
-class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin {
+class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+
+  bool get wantKeepAlive => true;
 
   List<V2Tab> tabs = [];
   Map<String, TabData> tabDataStore = {};

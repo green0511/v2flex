@@ -49,7 +49,7 @@ packages:
       name: csslib
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "0.16.1"
+    version: "0.16.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -63,14 +63,14 @@ packages:
       name: dio
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "3.0.9"
+    version: "3.0.10"
   dotted_border:
     dependency: "direct main"
     description:
       name: dotted_border
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.7"
   fake_async:
     dependency: transitive
     description:
@@ -94,14 +94,14 @@ packages:
       name: html
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "0.14.0+3"
+    version: "0.14.0+4"
   http:
     dependency: "direct main"
     description:
       name: http
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "0.12.0+4"
+    version: "0.12.2"
   http_parser:
     dependency: transitive
     description:
@@ -136,7 +136,7 @@ packages:
       name: path_drawing
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "0.4.1"
+    version: "0.4.1+1"
   path_parsing:
     dependency: transitive
     description:
@@ -150,7 +150,7 @@ packages:
       name: pedantic
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
-    version: "1.8.0+1"
+    version: "1.9.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -214,4 +214,3 @@ packages:
     version: "2.1.0-nullsafety.3"
 sdks:
   dart: ">=2.10.0-110 <2.11.0"
-  flutter: ">=0.3.6 <2.0.0"
