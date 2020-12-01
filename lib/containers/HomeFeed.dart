@@ -16,8 +16,8 @@ class HomeFeed extends StatefulWidget {
   }
 }
 
-class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-
+class HomeFeedState extends State<HomeFeed>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 
   List<V2Tab> tabs = [];
@@ -56,7 +56,9 @@ class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin,
     tabDataStore[tab.id] = tabDataStore[tab.id] ?? TabData();
     var currentTabData = tabDataStore[tab.id];
 
-    if (currentTabData.topicList.length > 0 && !currentTabData.hasExpire() && !isForce) {
+    if (currentTabData.topicList.length > 0 &&
+        !currentTabData.hasExpire() &&
+        !isForce) {
       // 已有数据并且没有过期，则不请求新数据
       return;
     }
@@ -76,7 +78,7 @@ class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin,
   }
 
   _onTabChanged() {
-    if (controller.index.toDouble() == controller.animation.value) { 
+    if (controller.index.toDouble() == controller.animation.value) {
       //赋值 并更新数据
       this.setState(() {
         _currentTabIndex = controller.index;
@@ -91,11 +93,28 @@ class HomeFeedState extends State<HomeFeed> with SingleTickerProviderStateMixin,
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Color.fromARGB(255, 240, 240, 240),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          Container(
+            height: 48,
+            color: Color.fromARGB(255, 230, 230, 230),
+            padding: EdgeInsets.only(
+              left: 20,
+              top: 10,
+            ),
+            child: Text(
+              'v2flex'.toUpperCase(),
+              style: TextStyle(
+                color: Colors.black,
+                letterSpacing: 4,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           renderTabBar(tabs, controller),
           Expanded(
             child: renderTabView(
@@ -122,11 +141,15 @@ Widget renderTabView(
   return TabBarView(
     controller: controller,
     children: tabs.map((tab) {
-      return SingleTabView(tab, tabDataStore, onRefresh, tab.id == currentTab.id);
+      return SingleTabView(
+        tab,
+        tabDataStore,
+        onRefresh,
+        tab.id == currentTab.id,
+      );
     }).toList(),
   );
 }
-
 
 class SingleTabView extends StatefulWidget {
   final V2Tab tab;
@@ -146,7 +169,8 @@ class SingleTabView extends StatefulWidget {
 }
 
 class _SingleTabViewState extends State<SingleTabView> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +183,9 @@ class _SingleTabViewState extends State<SingleTabView> {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (tabData.hasExpire() && !tabData.isRefreshing && widget.isCurrent) {
+          if (tabData.hasExpire() &&
+              !tabData.isRefreshing &&
+              widget.isCurrent) {
             _refreshIndicatorKey.currentState?.show();
           }
 

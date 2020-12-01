@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'utils/http_client.dart';
 
 import 'containers/HomeFeed.dart';
-import 'containers/AppBar.dart';
 
 void main() {
   initDio();
@@ -58,18 +57,22 @@ class MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: renderAppBar(),
-      body: PageView.builder(
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        controller: pageController,
-        itemCount: getWidgetFns.length,
-        itemBuilder: (context, index) {
-          return getWidgetFns[index]();
-        },
+      body: Container(
+        color: Color.fromARGB(255, 230, 230, 230),
+        child: SafeArea(
+          child: PageView.builder(
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            controller: pageController,
+            itemCount: getWidgetFns.length,
+            itemBuilder: (context, index) {
+              return getWidgetFns[index]();
+            },
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(255, 240, 240, 240),
