@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'routes.dart';
 import 'utils/http_client.dart';
 
 import 'containers/HomeFeed.dart';
@@ -19,6 +20,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Main(),
+      initialRoute: '/',
+      routes: routes,
     );
   }
 }

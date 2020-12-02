@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
@@ -54,12 +55,11 @@ Future<List<Topic>> fetchTab(V2Tab tab) async {
     // 解析投票
     int vote = 0;
     Element voteEl = ele.querySelector('.votes');
-    if (
-      voteEl != null
-      && voteEl.innerHtml != null
-      && voteEl.innerHtml.length > 0
-    ) {
-      RegExpMatch voteMatch = RegExp(r"&nbsp;(\d+) &nbsp;&nbsp;").firstMatch(ele.innerHtml);
+    if (voteEl != null &&
+        voteEl.innerHtml != null &&
+        voteEl.innerHtml.length > 0) {
+      RegExpMatch voteMatch =
+          RegExp(r"&nbsp;(\d+) &nbsp;&nbsp;").firstMatch(ele.innerHtml);
 
       String voteString = voteMatch.group(1);
       if (voteString != null && int.tryParse(voteString) > 0) {
@@ -70,7 +70,8 @@ Future<List<Topic>> fetchTab(V2Tab tab) async {
     // 解析节点
     Element v2NodeEl = ele.querySelector('.node');
     String nodeName = v2NodeEl.text;
-    RegExpMatch nodeIdMatch = RegExp(r"/go/(\w+)").firstMatch(v2NodeEl.attributes['href']);
+    RegExpMatch nodeIdMatch =
+        RegExp(r"/go/(\w+)").firstMatch(v2NodeEl.attributes['href']);
     String nodeId = nodeIdMatch.group(1);
 
     // 解析用户
@@ -79,11 +80,13 @@ Future<List<Topic>> fetchTab(V2Tab tab) async {
     String userName = avatarEl.attributes['alt'];
 
     // 解析最后回复
-    //  &nbsp;•&nbsp; 1 小时 49 分钟前 &nbsp;•&nbsp; 最后回复来自 
+    //  &nbsp;•&nbsp; 1 小时 49 分钟前 &nbsp;•&nbsp; 最后回复来自
     String lastTouchString = '';
     Element topicInfoEl = ele;
     if (topicInfoEl != null) {
-      RegExpMatch lastTouchTimeMatch = RegExp(r"([^&|^>]+) &nbsp;•&nbsp; 最后回复来自 ", multiLine: true).firstMatch(topicInfoEl.innerHtml);
+      RegExpMatch lastTouchTimeMatch =
+          RegExp(r"([^&|^>]+) &nbsp;•&nbsp; 最后回复来自 ", multiLine: true)
+              .firstMatch(topicInfoEl.innerHtml);
       if (lastTouchTimeMatch != null) {
         lastTouchString = lastTouchTimeMatch.group(1);
       }
@@ -111,11 +114,24 @@ Future<List<Topic>> fetchTab(V2Tab tab) async {
       vote: vote,
       node: V2Node(id: nodeId, name: nodeName),
       lastTouchString: lastTouchString,
-      lastTouchMember: lastTouchMemberName.length > 0 ? SimpleMember(lastTouchMemberName) : null,
+      lastTouchMember: lastTouchMemberName.length > 0
+          ? SimpleMember(lastTouchMemberName)
+          : null,
       replyCount: replyCount,
       link: topicLink,
     );
   }).toList();
 
   return items;
+}
+
+Future<TopicDetail> fetchTopicDetail(String id) async {
+  final response = await dio.get('/api/topics/show.json?id=$id');
+
+  var data = response.data;
+  var json = data.runtimeType == String ? jsonDecode(data) : data;
+  var topicJson = json[0];
+
+  TopicDetail topicDetail = TopicDetail.fromJson(topicJson);
+  return topicDetail;
 }

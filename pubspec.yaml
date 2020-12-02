@@ -27,6 +27,7 @@ dependencies:
   dotted_border: ^1.0.5
   html: ^0.14.0+3
   dio: ^3.0.9
+  flutter_markdown: ^0.5.1
 
 dev_dependencies:
   flutter_test:
