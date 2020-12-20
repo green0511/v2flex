@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 
-import 'package:v2flex/models/Models.dart';
+import 'package:v2flex/models/models.dart';
 import 'package:v2flex/utils/http_client.dart';
 
 class V2Tab {

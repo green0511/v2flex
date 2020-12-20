@@ -1,5 +1,5 @@
-import 'package:v2flex/models/Node.dart';
-import 'package:v2flex/models/SimpleMember.dart';
+import 'package:v2flex/models/node.dart';
+import 'package:v2flex/models/simple_member.dart';
 
 class Topic {
   String id;

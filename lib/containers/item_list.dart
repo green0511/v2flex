@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import 'package:v2flex/routes.dart';
-import 'package:v2flex/models/Models.dart';
+import 'package:v2flex/models/models.dart';
 
 class ItemsList extends StatelessWidget {
   final List<Topic> items;

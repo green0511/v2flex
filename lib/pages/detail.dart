@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import 'package:v2flex/models/Models.dart';
-import 'package:v2flex/api.dart';
+import 'package:v2flex/models/models.dart';
+import 'package:v2flex/services/api.dart';
 
 class PageDetail extends StatefulWidget {
   final Topic topic;

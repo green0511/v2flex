@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'models/Topic.dart';
+import 'models/topic.dart';
 import 'pages/detail.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();

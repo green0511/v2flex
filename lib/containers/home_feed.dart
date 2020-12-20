@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:v2flex/models/Topic.dart';
 
-import 'package:v2flex/models/Models.dart';
-import 'package:v2flex/api.dart';
+import 'package:v2flex/models/models.dart';
+import 'package:v2flex/services/api.dart';
 
-import 'package:v2flex/containers/TabBar.dart';
-import 'package:v2flex/containers/ItemList.dart';
+import 'package:v2flex/containers/tab_bar.dart';
+import 'package:v2flex/containers/item_list.dart';
 
 typedef RefreshCallback = Future<dynamic> Function(V2Tab tab, bool isForce);
 

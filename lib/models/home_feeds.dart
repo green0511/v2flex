@@ -1,4 +1,4 @@
-import 'package:v2flex/models/Topic.dart';
+import 'package:v2flex/models/topic.dart';
 
 class TabData {
   // expired in 60 seconds
@@ -10,8 +10,7 @@ class TabData {
 
   DateTime lastUpdateTime;
 
-  TabData()
-    : lastUpdateTime = DateTime.now();
+  TabData() : lastUpdateTime = DateTime.now();
 
   setList(List<Topic> newList) {
     topicList = newList;
@@ -19,6 +18,7 @@ class TabData {
   }
 
   hasExpire() {
-    return lastUpdateTime.millisecondsSinceEpoch + expireDuration <=  DateTime.now().millisecondsSinceEpoch;
+    return lastUpdateTime.millisecondsSinceEpoch + expireDuration <=
+        DateTime.now().millisecondsSinceEpoch;
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'routes.dart';
 import 'utils/http_client.dart';
 
-import 'containers/HomeFeed.dart';
+import 'containers/home_feed.dart';
 
 void main() {
   initDio();
