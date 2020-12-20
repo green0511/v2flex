@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:v2flex/services/api.dart';
+import 'package:v2flex/models/models.dart';
 
 Widget renderTabBar(List<V2Tab> tabs, TabController controller) {
   return Container(
