@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
+import 'package:v2flex/routes.dart';
 import 'package:v2flex/models/Models.dart';
 
 class ItemsList extends StatelessWidget {
@@ -41,10 +42,7 @@ class ItemsList extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    'detail',
-                    arguments: {'item': item},
-                  );
+                  NavigatorUtil.openTopicDetail(item);
                 },
                 child: Container(
                   padding:

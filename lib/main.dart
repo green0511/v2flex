@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Main(),
       initialRoute: '/',
-      routes: routes,
+      navigatorKey: navigatorKey,
     );
   }
 }
