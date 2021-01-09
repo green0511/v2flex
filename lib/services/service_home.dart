@@ -47,31 +47,11 @@ Future<dynamic> fetchIndex() async {
   };
 }
 
-Future<dynamic> initIndex() async {
-  List<V2Tab> tabList = await getTabsFromStore();
-  List<Topic> topicList = [];
+Future<List<Topic>> fetchTopicListInTab(V2Tab tab) async {
+  final response = await dio.get('/', queryParameters: {
+    'tab': tab.id,
+  });
+  Document document = parse(response.data);
 
-  if (tabList?.isEmpty ?? true) {
-    // 无缓存数据。从首页初始化
-    final response = await dio.get('/');
-    Document document = parse(response.data);
-
-    tabList = parseTabsFromIndexHTML(document);
-    topicList = parseTopicFromIndexHTML(document);
-
-    saveTabsToStore(tabList);
-  } else {
-    V2Tab currentTab = tabList[0];
-
-    final response = await dio.get('/', queryParameters: {
-      'tab': currentTab.id,
-    });
-    Document document = parse(response.data);
-    topicList = parseTopicFromIndexHTML(document);
-  }
-
-  return {
-    'tabList': tabList,
-    'topicList': topicList,
-  };
+  return parseTopicFromIndexHTML(document);
 }

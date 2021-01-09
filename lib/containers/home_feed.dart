@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:v2flex/models/models.dart';
-import 'package:v2flex/services/api.dart';
 import 'package:v2flex/services/services.dart';
 
 import 'package:v2flex/containers/tab_bar.dart';
