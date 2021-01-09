@@ -17,7 +17,7 @@ class TabData {
     lastUpdateTime = DateTime.now();
   }
 
-  hasExpire() {
+  bool get expired {
     return lastUpdateTime.millisecondsSinceEpoch + expireDuration <=
         DateTime.now().millisecondsSinceEpoch;
   }

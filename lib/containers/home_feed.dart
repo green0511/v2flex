@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:v2flex/models/models.dart';
 import 'package:v2flex/services/api.dart';
+import 'package:v2flex/services/services.dart';
 
 import 'package:v2flex/containers/tab_bar.dart';
 import 'package:v2flex/containers/item_list.dart';
@@ -38,8 +39,25 @@ class HomeFeedState extends State<HomeFeed>
     }
   }
 
-  _initTabs() {
-    tabs = fetchTabs();
+  _initTabs() async {
+    List<V2Tab> initTabs = await getTabsFromStore();
+
+    if (initTabs?.isEmpty ?? true) {
+      // 本地无缓存，从网络初始化 tabs + 首 tab 内容
+      var indexData = await fetchIndex();
+
+      initTabs = indexData['tabList'];
+      List<Topic> topicList = indexData['topicList'];
+
+      V2Tab currentTab = initTabs.elementAt(0);
+      if (currentTab?.id?.isNotEmpty ?? false) {
+        TabData currentTabData = TabData();
+        currentTabData.setList(topicList);
+        tabDataStore[currentTab.id] = currentTabData;
+      }
+    }
+
+    tabs = initTabs;
 
     controller = TabController(
       length: tabs.length,
@@ -48,15 +66,17 @@ class HomeFeedState extends State<HomeFeed>
 
     controller.addListener(() => _onTabChanged());
 
+    // 初始化首 tab
     fetchTabData(tabs[_currentTabIndex]);
+    setState(() {});
   }
 
   Future<void> fetchTabData(V2Tab tab, [bool isForce = false]) async {
     tabDataStore[tab.id] = tabDataStore[tab.id] ?? TabData();
-    var currentTabData = tabDataStore[tab.id];
+    TabData currentTabData = tabDataStore[tab.id];
 
     if (currentTabData.topicList.length > 0 &&
-        !currentTabData.hasExpire() &&
+        !currentTabData.expired &&
         !isForce) {
       // 已有数据并且没有过期，则不请求新数据
       return;
@@ -69,7 +89,7 @@ class HomeFeedState extends State<HomeFeed>
     });
 
     // print('fetching ${tab.name}');
-    List<Topic> data = await fetchTab(tab);
+    List<Topic> data = await fetchTopicListInTab(tab);
     setState(() {
       currentTabData.setList(data);
       currentTabData.isRefreshing = false;
@@ -92,6 +112,11 @@ class HomeFeedState extends State<HomeFeed>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    if (tabs?.isEmpty ?? true) {
+      return Container();
+    }
+
     return Container(
       color: Color.fromARGB(255, 240, 240, 240),
       child: Column(
@@ -182,9 +207,7 @@ class _SingleTabViewState extends State<SingleTabView> {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (tabData.hasExpire() &&
-              !tabData.isRefreshing &&
-              widget.isCurrent) {
+          if (tabData.expired && !tabData.isRefreshing && widget.isCurrent) {
             _refreshIndicatorKey.currentState?.show();
           }
 
