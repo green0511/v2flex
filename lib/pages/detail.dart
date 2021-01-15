@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 
 import 'package:v2flex/models/models.dart';
 import 'package:v2flex/services/services.dart';
@@ -117,11 +118,14 @@ class _PageDetailState extends State<PageDetail> {
     double fontSize = 20;
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
-      child: MarkdownBody(
-        data: topicDetail.content,
-        styleSheet: MarkdownStyleSheet(
-          p: TextStyle(fontSize: fontSize, height: 1.4),
-        ),
+      child: Html(
+        data: topicDetail.contentRendered ?? '',
+        style: {
+          'p': Style(
+            fontSize: FontSize(fontSize),
+            lineHeight: 1.4,
+          ),
+        },
       ),
     );
   }

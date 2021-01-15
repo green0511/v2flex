@@ -1,14 +1,18 @@
 class TopicDetail {
   String lastReplyBy;
   int lastTouched;
-  String title;
   String url;
-  int created;
   String content;
-  String contentRendered;
   int lastModified;
   int replies;
+
+  int created;
+
+  String title;
+  String contentRendered;
   int id;
+
+  DateTime publishTime;
 
   TopicDetail({
     this.lastReplyBy,
